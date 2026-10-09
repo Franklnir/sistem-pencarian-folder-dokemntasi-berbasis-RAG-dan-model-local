@@ -1,0 +1,32 @@
+<!-- AI FILE SEARCH — Jinja2 Results Template Component -->
+{% if results and results|length > 0 %}
+  {% for item in results %}
+    <div class="result-card" data-file-id="{{ item.file_id }}">
+      <div class="result-header">
+        <div class="result-title-group">
+          <span class="result-icon">
+            {% if item.extension == '.pdf' %}📕{% elif item.extension == '.docx' %}📘{% else %}📝{% endif %}
+          </span>
+          <span class="result-filename">{{ item.filename }}</span>
+        </div>
+        <div class="result-badges">
+          <span class="badge-relevance">Relevansi {{ (item.score * 100)|round|int }}%</span>
+          {% if item.page_no %}
+            <span class="badge-page">Hal. {{ item.page_no }}</span>
+          {% endif %}
+          <span class="badge-match-type">{{ item.match_type }}</span>
+        </div>
+      </div>
+      <div class="result-path">{{ item.path }}</div>
+      <div class="result-snippet">{{ item.snippet }}</div>
+      <div class="result-actions">
+        <button class="btn-action btn-open-file" onclick="handleOpenFile({{ item.file_id }})">Open File</button>
+        <button class="btn-action btn-reveal-file" onclick="handleRevealFile({{ item.file_id }})">Open Location</button>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty-hint" style="padding: 30px; text-align: center;">
+    Tidak ada dokumen yang relevan. Coba kata kunci lain atau periksa folder yang dipantau.
+  </div>
+{% endif %}

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENA — AI Knowledge Search Hub (Local & 100% Gratis)</title>
+  <meta name="description" content="Pusat pencarian dokumen lokal cerdas berbasis Hybrid Retrieval (BM25 + Semantic Vector) tanpa biaya cloud ($0).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css?v=5.1">
+</head>
+<body class="ai-hub-dark">
+
+  <div class="app-layout">
+    <!-- 1. TOP NAVBAR -->
+    <header class="hub-header">
+      <div class="nav-brand">
+        <div class="brand-logo-glow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="50%" stop-color="#818cf8"/>
+                <stop offset="100%" stop-color="#c084fc"/>
+              </linearGradient>
+            </defs>
+            <circle cx="12" cy="12" r="10" stroke="url(#brand-grad)" stroke-width="2.2" stroke-dasharray="4 2"/>
+            <path d="M12 3v3m0 12v3M3 12h3m12 0h3m-3.5-6.5l-2 2m-7 7l-2 2m0-11l2 2m7 7l2 2" stroke="url(#brand-grad)" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="3.5" fill="url(#brand-grad)"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">SENA</span>
+          <span class="brand-badge">AI Knowledge Hub</span>
+        </div>
+      </div>
+
+      <div class="nav-center-badges">
+        <!-- Zero Cloud Cost Badge -->
+        <div class="badge-pill badge-zero-cost" title="100% Berjalan Lokal di Mesin Anda Tanpa Langganan API">
+          <span class="pill-sparkle">✨</span>
+          <span>100% Offline & $0 Cloud Cost</span>
+        </div>
+
+        <!-- Local LLM Status Badge -->
+        <div id="llm-status-badge" class="badge-pill badge-llm" title="Status Model AI Qwen 2.5 (Klik untuk Info & Download)">
+          <span class="llm-pulse-dot"></span>
+          <span id="llm-status-text">Memeriksa AI...</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div id="service-status" class="status-indicator">
+          <span class="dot"></span>
+          <span class="status-text">Backend Siap</span>
+        </div>
+        <button id="btn-open-doc-chat" class="btn-nav-action btn-nav-chat" title="Chat AI Khusus Dokumen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>💬 Chat Dokumen</span>
+        </button>
+        <button id="btn-add-folder-modal" class="btn-nav-action" title="Tambah Folder Pantauan Baru">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            <line x1="12" y1="11" x2="12" y2="17"></line>
+            <line x1="9" y1="14" x2="15" y2="14"></line>
+          </svg>
+          <span>+ Folder Pantau</span>
+        </button>
+        <button id="btn-open-settings" class="btn-nav-action btn-nav-settings" title="Pengaturan & Perawatan Indeks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Pemeliharaan</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. MAIN HUB CONTENT -->
+    <main class="hub-main-container">
+      
+      <!-- HERO SEARCH SECTION -->
+      <section class="hub-hero">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-chip">HYBRID SEMANTIC RETRIEVAL</span>
+          <span class="eyebrow-sep">•</span>
+          <span class="eyebrow-text">Sentence Transformers (Vektor) + BM25 (Kata Kunci) + RRF</span>
+        </div>
+
+        <h1 class="hero-headline">Temukan Informasi di Dokumen Lokal Anda</h1>
+        <p class="hero-subtitle">Ketik topik, ide, atau pertanyaan dalam bahasa alami. Sistem memahami makna isi dokumen, bukan sekadar nama file.</p>
+
+        <!-- Search Bar Big Box -->
+        <div class="hero-search-box">
+          <div class="search-input-wrapper">
+            <svg class="search-icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              id="search-input"
+              class="hero-search-input"
+              placeholder="Cari makna dokumen (misal: 'keamanan enkripsi jaringan', 'analisis sensor IoT')..."
+              autocomplete="off"
+              autofocus
+            >
+            <button id="btn-clear-search" class="btn-clear-search" title="Bersihkan Pencarian (Esc)">✕</button>
+          </div>
+          <button id="btn-submit-search" class="btn-search-hero">
+            <span>Cari Makna</span>
+            <kbd class="kbd-hint">Enter</kbd>
+          </button>
+        </div>
+
+        <!-- 1-Click Pill Filters & Auto-Kesimpulan Toggle -->
+        <div class="hero-controls-row">
+          <div class="filter-pills-group">
+            <span class="control-label">Format:</span>
+            <button type="button" class="format-pill active" data-filter="all">Semua Format</button>
+            <button type="button" class="format-pill" data-filter=".pdf">📕 Dokumen PDF</button>
+            <button type="button" class="format-pill" data-filter=".docx">📘 Dokumen Word</button>
+            <button type="button" class="format-pill" data-filter=".txt">📝 Teks (.txt)</button>
+            
+            <!-- Hidden inputs to preserve backend JS compatibility -->
+            <input type="checkbox" id="filter-pdf" value=".pdf" checked style="display:none;">
+            <input type="checkbox" id="filter-docx" value=".docx" checked style="display:none;">
+            <input type="checkbox" id="filter-txt" value=".txt" checked style="display:none;">
+          </div>
+
+          <div class="sort-pills-group">
+            <span class="control-label">Urutkan:</span>
+            <button type="button" class="sort-pill active" id="sort-relevance" title="Peringkat gabungan Semantik + Leksikal">🎯 Paling Relevan</button>
+            <button type="button" class="sort-pill" id="sort-date" title="Urutkan dari waktu edit dokumen terbaru">🕒 Dokumen Terbaru</button>
+          </div>
+
+          <!-- Perplexity Auto-Summary Switch -->
+          <div class="auto-summary-group">
+            <label class="auto-summary-toggle" title="Otomatis menyusun kesimpulan cerdas ala Perplexity setiap mencari dokumen">
+              <input type="checkbox" id="toggle-auto-summary" checked>
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">✨ Auto Kesimpulan Perplexity</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Topic Suggestion Pills -->
+        <div class="topic-suggestions-row">
+          <span class="topic-label">Contoh Topik Cerdas:</span>
+          <div class="topic-chips" id="topic-chips">
+            <button type="button" class="chip-topic" data-query="kriptografi dan protokol keamanan jaringan">🔐 Kriptografi & Jaringan</button>
+            <button type="button" class="chip-topic" data-query="analisis sensor IoT menggunakan PySpark">⚡ Sensor IoT & PySpark</button>
+            <button type="button" class="chip-topic" data-query="laporan kerja praktik dan rancangan sistem">📑 Laporan KP & Sistem</button>
+            <button type="button" class="chip-topic" data-query="panduan flash dan pemetaan GPIO ESP32">📟 GPIO & Firmware ESP32</button>
+            <button type="button" class="chip-topic" data-query="resep kuliner nusantara dan bumbu">🍲 Resep Masakan</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEARCH RESULTS OR DEFAULT DASHBOARD CONTAINER -->
+      <section class="hub-results-section">
+        
+        <!-- Results Status Banner (Active during search) -->
+        <div id="results-bar" class="results-header-bar hidden">
+          <div class="results-bar-left">
+            <h2 id="results-count" class="results-headline">Mencari dokumen...</h2>
+            <span id="results-latency" class="latency-badge"></span>
+          </div>
+          <div class="results-bar-right">
+            <button id="btn-back-dashboard" class="btn-text-action">← Kembali ke Beranda Dokumen</button>
+          </div>
+        </div>
+
+        <!-- PERPLEXITY-STYLE AI KESIMPULAN & SOURCES CARD -->
+        <div id="smart-answer-box" class="perplexity-card hidden">
+          <!-- Card Header -->
+          <div class="perplexity-header">
+            <div class="perplexity-title-group">
+              <div class="perplexity-icon-glow">
+                <span class="perplexity-icon">✨</span>
+              </div>
+              <div class="perplexity-title-text-group">
+                <div class="perplexity-title-row">
+                  <h3 class="perplexity-title">Kesimpulan AI</h3>
+                  <span class="perplexity-badge" id="perplexity-active-model-badge">⚡ Qwen 2.5 0.5B (468 MB) • Offline</span>
+                  <span id="smart-answer-relevance" class="smart-relevance-pill">Relevansi Tinggi</span>
+                </div>
+                <span class="perplexity-subtitle">Disintesis dari temuan dokumen di komputer Anda (Gaya Perplexity)</span>
+              </div>
+            </div>
+
+            <div class="perplexity-header-controls">
+              <!-- Mode Selector Pills -->
+              <div class="mode-selector" id="mode-selector-main">
+                <button type="button" class="mode-pill" data-mode="fast" title="Jawaban ringkas & instan (160 token, 3 chunks)">⚡ Cepat</button>
+                <button type="button" class="mode-pill active" data-mode="balance" title="Jawaban standar & presisi (384 token, 5 chunks)">⚖️ Balance</button>
+                <button type="button" class="mode-pill" data-mode="thinking" title="Jawaban mendalam & analitis (768 token, 8 chunks)">🧠 Thinking</button>
+              </div>
+
+              <!-- Quick action buttons -->
+              <button type="button" id="btn-copy-summary" class="btn-action-perplexity" title="Salin Kesimpulan ke Clipboard">
+                <span>📋</span>
+                <span class="btn-label-text">Salin</span>
+              </button>
+              <button type="button" id="btn-refresh-summary" class="btn-action-perplexity" title="Generate Ulang Kesimpulan">
+                <span>🔄</span>
+                <span class="btn-label-text">Ulangi</span>
+              </button>
+              <button type="button" id="btn-toggle-summary-collapse" class="btn-action-perplexity icon-only" title="Sembunyikan / Tampilkan Rincian">
+                <span id="summary-collapse-icon">▲</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Perplexity Sources Pills Row -->
+          <div class="perplexity-sources-section" id="perplexity-sources-section">
+            <span class="sources-section-label">📚 Dokumen Rujukan:</span>
+            <div id="perplexity-sources-list" class="perplexity-sources-list">
+              <!-- Populated dynamically with source pills [1], [2], etc. -->
+            </div>
+          </div>
+
+          <!-- Multi-Step Thinking Animation (Active during synthesis) -->
+          <div id="qwen-thinking-steps" class="thinking-steps hidden">
+            <div class="thinking-step" data-step="1">
+              <span class="thinking-step-icon">🔍</span>
+              <span class="thinking-step-text">Mengumpulkan potongan dokumen relevan...</span>
+              <span class="thinking-step-status"></span>
+            </div>
+            <div class="thinking-step" data-step="2">
+              <span class="thinking-step-icon">🧠</span>
+              <span class="thinking-step-text">Qwen menganalisis isi & merumuskan kesimpulan...</span>
+              <span class="thinking-step-status"></span>
+            </div>
+            <div class="thinking-step" data-step="3">
+              <span class="thinking-step-icon">✍️</span>
+              <span class="thinking-step-text">Menyajikan jawaban terstruktur ala Perplexity...</span>
+              <span class="thinking-step-status"></span>
+            </div>
+          </div>
+
+          <!-- Main AI Kesimpulan Content -->
+          <div id="perplexity-summary-body" class="perplexity-summary-body">
+            <div id="qwen-synthesis-text" class="perplexity-summary-text markdown-body">
+              <!-- Synthesized AI text rendered here -->
+            </div>
+          </div>
+
+          <!-- Fallback quote / legacy placeholder for compatibility -->
+          <div id="smart-answer-quote" style="display:none;"></div>
+          <div id="qwen-synthesis-box" style="display:contents;"></div>
+
+          <!-- Card Footer (Metadata & Status) -->
+          <div class="perplexity-footer">
+            <div class="perplexity-meta-left">
+              <span id="qwen-meta-info" class="perplexity-meta-text">Qwen 2.5 • ⚖️ Balance</span>
+            </div>
+            <div class="perplexity-footer-right">
+              <button type="button" id="btn-ask-qwen-ai" class="btn-ask-ai hidden" title="Buat Kesimpulan AI Manual">
+                <span class="ai-sparkle-icon">✨</span>
+                <span>Buat Kesimpulan AI</span>
+              </button>
+              <span class="badge-perpexity-offline">🔒 100% Privat & Offline</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Heading for Results list -->
+        <div id="results-divider-label" class="results-divider-label hidden">
+          <span>📑 Dokumen Temuan Terkait & Rujukan Lengkap</span>
+        </div>
+
+        <!-- DYNAMIC RESULTS / DASHBOARD CONTAINER -->
+        <div id="explorer-view-container" class="hub-view-container">
+          <!-- Populated dynamically by app.js (Cards or Default Dashboard) -->
+        </div>
+
+      </section>
+
+      <!-- HIDDEN COMPATIBILITY ELEMENTS (Required by app.js so nothing breaks) -->
+      <div style="display:none;">
+        <span id="breadcrumb-trail"><span class="crumb-segment active" data-folder=""></span></span>
+        <button id="btn-copy-address"></button>
+        <button id="btn-nav-up"></button>
+        <button id="btn-nav-refresh"></button>
+        <button id="btn-view-details"></button>
+        <button id="btn-view-grid"></button>
+        <button id="btn-toggle-preview"></button>
+        <aside id="explorer-preview-pane"><div id="preview-content"></div><button id="btn-close-preview"></button></aside>
+        <div id="folders-list"></div>
+      </div>
+
+    </main>
+
+    <!-- 3. BOTTOM FOOTER STATUS BAR -->
+    <footer class="hub-statusbar">
+      <div class="statusbar-left">
+        <span id="stat-items-count">0 dokumen</span>
+        <span class="stat-dot">•</span>
+        <span id="stat-indexed">Indexed: 0 files</span>
+        <span class="stat-dot">•</span>
+        <span id="stat-chunks">0 chunks vektor</span>
+        <span class="stat-dot">•</span>
+        <span id="stat-selection" style="display:none;"></span>
+      </div>
+      <div class="statusbar-right">
+        <span id="stat-queue">Antrean: 0</span>
+        <span class="stat-dot">•</span>
+        <span id="stat-db">Database: SQLite Fallback</span>
+        <span class="stat-dot">•</span>
+        <span id="stat-sse" class="sse-status online">● Realtime Sync Aktif</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- QUICK READER MODAL (Baca Dokumen Tanpa Buka Word/PDF) -->
+  <div id="modal-reader" class="modal-overlay hidden">
+    <div class="modal-card modal-reader-card">
+      <div class="modal-header">
+        <div class="reader-header-left">
+          <span id="reader-file-icon" class="reader-icon">📄</span>
+          <div>
+            <h3 id="reader-filename" class="reader-title">Pratinjau Isi Dokumen</h3>
+            <div id="reader-meta" class="reader-subtitle">Ekstrak teks bersih & vektor semantik</div>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-reader">✕</button>
+      </div>
+      <div class="modal-body reader-body">
+        <div class="reader-quick-actions">
+          <button id="btn-reader-open" class="btn btn-primary">📂 Buka di Aplikasi Windows</button>
+          <button id="btn-reader-reveal" class="btn btn-secondary">🔍 Tampilkan di Folder</button>
+          <button id="btn-reader-copy" class="btn btn-secondary">📋 Salin Semua Teks</button>
+        </div>
+        <div class="reader-content-box" id="reader-content-text">
+          Memuat isi dokumen...
+        </div>
+
+        <!-- Ask AI About This Document -->
+        <div class="reader-ai-section">
+          <div class="reader-ai-header">
+            <span class="reader-ai-title">🤖 Tanya AI Mengenai Dokumen Ini:</span>
+            <span class="reader-ai-hint">Jawaban disintesis oleh Qwen 2.5 berdasarkan teks dokumen di atas</span>
+          </div>
+          <!-- Mode Selector for Reader -->
+          <div class="mode-selector" id="mode-selector-reader">
+            <button type="button" class="mode-pill" data-mode="fast" title="Jawaban singkat">⚡ Cepat</button>
+            <button type="button" class="mode-pill active" data-mode="balance" title="Jawaban standar">⚖️ Balance</button>
+            <button type="button" class="mode-pill" data-mode="thinking" title="Jawaban mendalam">🧠 Thinking</button>
+          </div>
+          <div class="reader-ai-input-row">
+            <input type="text" id="reader-ai-input" class="text-input" placeholder="Tanyakan isi, simpulan, atau detail dokumen ini...">
+            <button id="btn-reader-ai-ask" class="btn btn-primary">Kirim Pertanyaan</button>
+          </div>
+          <div id="reader-ai-response" class="reader-ai-response hidden">
+            <!-- Multi-Step Thinking Animation for Reader -->
+            <div id="reader-thinking-steps" class="thinking-steps hidden">
+              <div class="thinking-step" data-step="1">
+                <span class="thinking-step-icon">🔍</span>
+                <span class="thinking-step-text">Mencari konteks di dokumen...</span>
+                <span class="thinking-step-status"></span>
+              </div>
+              <div class="thinking-step" data-step="2">
+                <span class="thinking-step-icon">🧠</span>
+                <span class="thinking-step-text">Qwen sedang berpikir...</span>
+                <span class="thinking-step-status"></span>
+              </div>
+              <div class="thinking-step" data-step="3">
+                <span class="thinking-step-icon">✍️</span>
+                <span class="thinking-step-text">Menyusun jawaban...</span>
+                <span class="thinking-step-status"></span>
+              </div>
+            </div>
+            <div id="reader-ai-text" class="reader-ai-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD FOLDER MODAL -->
+  <div id="modal-add-folder" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span style="font-size: 20px;">📁</span>
+          <h3>Tambah Folder Pantauan Baru</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-folder-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">Dokumen di folder ini akan otomatis diindeks secara inkremental (hanya perubahan yang diproses):</p>
+        
+        <button type="button" id="btn-browse-native" class="btn btn-browse-hero">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Pilih Folder via Dialog Windows</span>
+        </button>
+
+        <div class="quick-folder-shortcuts">
+          <span class="shortcuts-label">Atau pilih folder cepat:</span>
+          <div class="shortcut-chips">
+            <button type="button" class="btn-shortcut" data-path="Documents">📁 Documents</button>
+            <button type="button" class="btn-shortcut" data-path="Downloads">📥 Downloads</button>
+            <button type="button" class="btn-shortcut" data-path="Desktop">🖥️ Desktop</button>
+            <button type="button" class="btn-shortcut" data-path="sample_docs">📄 Sample Docs</button>
+          </div>
+        </div>
+
+        <div class="path-input-group">
+          <label for="input-folder-path" class="input-label">Path Folder:</label>
+          <input type="text" id="input-folder-path" class="text-input" placeholder="Path folder Windows (misal: C:\Users\frank\Documents)...">
+        </div>
+
+        <div id="folder-modal-error" class="error-msg hidden"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-folder">Batal</button>
+        <button class="btn btn-primary" id="btn-save-folder">Mulai Pantau Folder Ini</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="modal-settings" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Pengaturan & Diagnostik Sistem</h3>
+        <button class="btn-close-modal" id="btn-close-settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <h4>Rebuild Seluruh Indeks</h4>
+          <p class="text-muted">Jalankan re-index menyeluruh untuk semua dokumen di folder yang dipantau.</p>
+          <button id="btn-trigger-rebuild" class="btn btn-danger">Rebuild Index (Semua Dokumen)</button>
+        </div>
+        <div class="settings-group">
+          <h4>Resume Pekerjaan Tertunda / Gagal</h4>
+          <p class="text-muted">Coba proses ulang dokumen yang sebelumnya tertunda atau terkunci aplikasi lain.</p>
+          <button id="btn-trigger-resume" class="btn btn-secondary">Resume Failed Jobs</button>
+        </div>
+        <div id="settings-status-msg" class="info-msg hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LLM MODEL MANAGER & SELECTOR MODAL -->
+  <div id="modal-llm" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span style="font-size: 20px;">🤖</span>
+          <h3>Pilih Model AI Lokal (100% Offline & $0)</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-llm">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="llm-info-box">
+          <p>SENA berjalan 100% di CPU lokal laptop Anda. Pilih model AI yang paling pas untuk kebutuhan Anda di bawah ini:</p>
+        </div>
+
+        <!-- Dynamic Model Catalog List -->
+        <div id="llm-models-catalog" class="llm-models-grid">
+          <!-- Dynamically populated via checkLLMStatus() in app.js -->
+        </div>
+
+        <div id="llm-download-card" class="llm-download-card hidden" style="margin-top: 14px;">
+          <div class="llm-card-status">
+            <span class="status-title" id="llm-download-title">Mengunduh Model:</span>
+            <span id="llm-detail-status-pill" class="badge-pill">0%</span>
+          </div>
+          <div id="llm-progress-container" class="llm-progress-bar-wrap">
+            <div class="progress-bar-track">
+              <div id="llm-progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <span id="llm-progress-label" class="progress-label">0%</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-close-llm-footer">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENT CHAT PANEL MODAL -->
+  <div id="modal-doc-chat" class="modal-overlay hidden">
+    <div class="modal-card modal-doc-chat-card">
+      <div class="modal-header doc-chat-header">
+        <div class="modal-title-wrap">
+          <span style="font-size: 20px;">💬</span>
+          <h3>Chat Dokumen — Qwen 2.5 AI</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-doc-chat">✕</button>
+      </div>
+      <div class="modal-body doc-chat-body">
+        <!-- Document Selector -->
+        <div class="doc-chat-selector">
+          <div class="doc-chat-selector-header">
+            <span class="doc-selector-label">📄 Pilih Dokumen (WAJIB):</span>
+            <span id="doc-chat-selected-info" class="doc-selector-info">Belum ada dokumen dipilih</span>
+          </div>
+          <select id="doc-chat-file-select" class="doc-chat-select">
+            <option value="" disabled selected>— Pilih dokumen yang sudah diindeks —</option>
+          </select>
+        </div>
+
+        <!-- Mode Selector for Doc Chat -->
+        <div class="doc-chat-mode-row">
+          <span class="mode-row-label">Mode Jawaban:</span>
+          <div class="mode-selector" id="mode-selector-doc-chat">
+            <button type="button" class="mode-pill" data-mode="fast" title="Jawaban singkat & cepat">⚡ Cepat</button>
+            <button type="button" class="mode-pill active" data-mode="balance" title="Jawaban standar">⚖️ Balance</button>
+            <button type="button" class="mode-pill" data-mode="thinking" title="Jawaban mendalam & analitis">🧠 Thinking</button>
+          </div>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div id="doc-chat-messages" class="doc-chat-messages">
+          <div class="doc-chat-placeholder">
+            <div class="placeholder-icon">📂</div>
+            <h4>Pilih dokumen di atas untuk mulai chat</h4>
+            <p>AI hanya akan menjawab pertanyaan berdasarkan isi dokumen yang Anda pilih. Pertanyaan di luar konteks dokumen akan ditolak.</p>
+          </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="doc-chat-input-area">
+          <div class="doc-chat-input-row">
+            <input type="text" id="doc-chat-input" class="text-input doc-chat-input-field" placeholder="Pilih dokumen terlebih dahulu..." disabled>
+            <button id="btn-doc-chat-send" class="btn btn-primary btn-doc-chat-send" disabled title="Kirim pertanyaan">Kirim</button>
+          </div>
+          <div class="doc-chat-input-hint">
+            <span>Tekan <kbd class="kbd-hint">Enter</kbd> untuk kirim</span>
+            <span>•</span>
+            <span>100% Offline & $0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Activity Feed Container for SSE integration -->
+  <div id="activity-feed" style="display:none;"></div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/static/js/app.js?v=5.3"></script>
+</body>
+</html>

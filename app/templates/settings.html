@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan & Diagnostik — AI File Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <style>
+    .settings-page-container {
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+    .settings-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .diagnostics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .diag-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .diag-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .diag-val {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-indigo);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .nav-back:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout" style="height: auto; min-height: 100vh; overflow-y: auto;">
+    <header class="app-header">
+      <div class="brand">
+        <a href="/" class="brand-icon" style="text-decoration: none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </a>
+        <div>
+          <h1 class="brand-title">AI FILE SEARCH</h1>
+          <span class="brand-subtitle">Pengaturan Sistem & Diagnostik Indeks</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="/" class="btn btn-secondary">← Kembali ke Pencarian</a>
+      </div>
+    </header>
+
+    <div class="settings-page-container">
+      <a href="/" class="nav-back">← Kembali ke Halaman Utama</a>
+
+      <!-- DIAGNOSTICS SECTION (Section 26) -->
+      <div class="settings-card">
+        <h2 class="settings-title">Observabilitas & Status Sistem</h2>
+        <p class="text-muted">Metrik real-time komponen retrieval, embedding, database, dan pemantau sistem.</p>
+
+        <div class="diagnostics-grid">
+          <div class="diag-item">
+            <span class="diag-label">Layanan Backend</span>
+            <span class="diag-val" id="diag-service">Checking...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Penyimpanan / DB</span>
+            <span class="diag-val" id="diag-database">Checking...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Filesystem Watcher</span>
+            <span class="diag-val" id="diag-watcher">Checking...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Model Embedding</span>
+            <span class="diag-val" id="diag-embedding">Checking...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Dokumen Terindeks</span>
+            <span class="diag-val" id="diag-files">0</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Total Token Chunks</span>
+            <span class="diag-val" id="diag-chunks">0</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Antrean Ingestion</span>
+            <span class="diag-val" id="diag-queue">0</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">Dokumen Gagal</span>
+            <span class="diag-val" id="diag-failed">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAINTENANCE ACTIONS -->
+      <div class="settings-card">
+        <h2 class="settings-title">Pemeliharaan & Rekonstruksi Indeks</h2>
+        <p class="text-muted">Jalankan re-indeks berkala atau lanjutkan pemrosesan file yang tertunda.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 18px;">
+          <div class="settings-group">
+            <h4>Rebuild Seluruh Indeks (Full Scan)</h4>
+            <p class="text-muted">
+              Memindai ulang semua dokumen pada seluruh direktori aktif.
+              Dokumen dengan hash SHA-256 yang sama akan secara otomatis dilewati (*skip re-embedding*).
+            </p>
+            <button id="btn-rebuild-full" class="btn btn-danger" style="width: max-content;">
+              Rebuild Seluruh Indeks
+            </button>
+          </div>
+
+          <div class="settings-group">
+            <h4>Lanjutkan Pekerjaan Tertunda / Gagal</h4>
+            <p class="text-muted">
+              Mencoba memproses ulang dokumen yang berstatus PENDING atau FAILED.
+            </p>
+            <button id="btn-resume-jobs" class="btn btn-secondary" style="width: max-content;">
+              Resume Pekerjaan Gagal
+            </button>
+          </div>
+        </div>
+
+        <div id="action-msg" class="info-msg hidden" style="margin-top: 16px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadDiagnostics() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        document.getElementById('diag-service').textContent = data.service.toUpperCase();
+        document.getElementById('diag-database').textContent = data.database === 'ok' ? 'PostgreSQL (OK)' : 'Fallback (Active)';
+        document.getElementById('diag-watcher').textContent = data.watcher.toUpperCase();
+        document.getElementById('diag-embedding').textContent = data.embedding_model.toUpperCase();
+        document.getElementById('diag-files').textContent = data.indexed_files;
+        document.getElementById('diag-chunks').textContent = data.indexed_chunks;
+        document.getElementById('diag-queue').textContent = data.pending_jobs;
+        document.getElementById('diag-failed').textContent = data.failed_files;
+      } catch (e) {
+        console.error('Failed to load status', e);
+      }
+    }
+
+    document.getElementById('btn-rebuild-full').addEventListener('click', async () => {
+      if (!confirm('Rebuild akan memindai ulang seluruh direktori. Lanjutkan?')) return;
+      const res = await fetch('/api/index/rebuild', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirm: true, scope: 'all' })
+      });
+      const data = await res.json();
+      const msg = document.getElementById('action-msg');
+      msg.textContent = data.message || 'Rebuild dimulai...';
+      msg.classList.remove('hidden');
+      loadDiagnostics();
+    });
+
+    document.getElementById('btn-resume-jobs').addEventListener('click', async () => {
+      const res = await fetch('/api/index/resume', { method: 'POST' });
+      const data = await res.json();
+      const msg = document.getElementById('action-msg');
+      msg.textContent = `Memproses ulang ${data.count} dokumen.`;
+      msg.classList.remove('hidden');
+      loadDiagnostics();
+    });
+
+    loadDiagnostics();
+    setInterval(loadDiagnostics, 3000);
+  </script>
+</body>
+</html>

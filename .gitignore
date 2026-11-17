@@ -28,7 +28,7 @@ venv.bak/
 .env
 *.local.env
 
-# SENA Local Databases & WAL logs
+# Fendora AI Local Databases & WAL logs
 data/*.db
 data/*.db-shm
 data/*.db-wal

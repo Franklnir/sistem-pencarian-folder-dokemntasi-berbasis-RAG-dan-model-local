@@ -1,8 +1,8 @@
 """
-SENA — Smart Enterprise & Network Archive
+Fendora AI — Intelligent Local Knowledge & Search Hub
 Launcher Otomatis (1-Click Run)
 
-Skrip ini memudahkan siapa pun untuk menjalankan SENA tanpa setup rumit.
+Skrip ini memudahkan siapa pun untuk menjalankan Fendora AI tanpa setup rumit.
 Cukup jalankan:
     python run.py
 """
@@ -165,7 +165,7 @@ def main():
     port = 8000
     url = f"http://{host}:{port}"
 
-    print(f"\n{GREEN}{BOLD}Memulai Server SENA...{RESET}")
+    print(f"\n{GREEN}{BOLD}Memulai Server Fendora AI...{RESET}")
     print(f"Akses Web UI di: {CYAN}{BOLD}{url}{RESET}")
     print(f"{YELLOW}(Tekan Ctrl+C di terminal ini untuk mematikan server){RESET}\n")
 

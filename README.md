@@ -1,4 +1,4 @@
-# SENA — AI Knowledge Search Hub (Local & 100% Offline)
+# Fendora AI — AI Knowledge Search Hub (Local & 100% Offline)
 
 > **Sistem Pencarian Folder & Dokumentasi Cerdas Berbasis Hybrid RAG (BM25 + Semantic Vector Embedding) dan Model AI Lokal (Qwen 2.5 GGUF) — 100% Gratis, Tanpa Kuota Cloud API, dan Menjaga Privasi Data Anda.**
 
@@ -26,9 +26,9 @@
 
 ## 1. Tentang Proyek
 
-**SENA** adalah mesin pencari pengetahuan internal (*Local Knowledge Hub*) yang memungkinkan Anda mencari, menelusuri, dan merangkum ribuan file dokumen (**PDF, DOCX, TXT**) yang tersebar di komputer Anda berdasarkan **makna konteks bahasa alami**, bukan hanya kecocokan nama file.
+**Fendora AI** adalah mesin pencari pengetahuan internal (*Local Knowledge Hub*) yang memungkinkan Anda mencari, menelusuri, dan merangkum ribuan file dokumen (**PDF, DOCX, TXT**) yang tersebar di komputer Anda berdasarkan **makna konteks bahasa alami**, bukan hanya kecocokan nama file.
 
-Berbeda dengan solusi cloud yang berbayar dan mengunggah dokumen rahasia Anda ke internet, SENA berjalan **100% lokal di CPU laptop/PC**:
+Berbeda dengan solusi cloud yang berbayar dan mengunggah dokumen rahasia Anda ke internet, Fendora AI berjalan **100% lokal di CPU laptop/PC**:
 - **$0 Biaya Cloud**: Tidak membutuhkan langganan OpenAI, Anthropic, atau Gemini API.
 - **Privasi Terjaga**: Dokumen tidak pernah keluar dari harddisk komputer Anda.
 - **Sintesis Gaya Perplexity AI**: Menyediakan kesimpulan naratif cerdas yang mengalir alami dengan sitasi dokumen `[1]`, `[2]` yang dapat langsung diklik untuk melompat ke halaman rujukan.
@@ -37,7 +37,7 @@ Berbeda dengan solusi cloud yang berbayar dan mengunggah dokumen rahasia Anda ke
 
 ## 2. Cara Kerja Sistem (How It Works)
 
-SENA bekerja menggunakan arsitektur **Hybrid Retrieval-Augmented Generation (Hybrid RAG)** yang terbagi ke dalam 3 alur utama:
+Fendora AI bekerja menggunakan arsitektur **Hybrid Retrieval-Augmented Generation (Hybrid RAG)** yang terbagi ke dalam 3 alur utama:
 
 ```mermaid
 flowchart TD
@@ -170,7 +170,7 @@ Aplikasi akan aktif dan dapat diakses di browser pada alamat:
 
 ## 6. Katalog & Pemilihan Model AI Lokal
 
-SENA dilengkapi dengan **Model Switcher** yang memungkinkan Anda memilih model AI yang paling cocok dengan kapasitas laptop Anda:
+Fendora AI dilengkapi dengan **Model Switcher** yang memungkinkan Anda memilih model AI yang paling cocok dengan kapasitas laptop Anda:
 
 | Model | Ukuran File | Kebutuhan RAM | Kecepatan CPU | Rekomendasi Penggunaan |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,9 +1,9 @@
 @echo off
-TITLE SENA - AI Knowledge Search Hub
+TITLE Fendora AI - Knowledge Search Hub
 color 0b
 
 echo ==================================================================
-echo    S E N A  --  AI Knowledge Search Hub (Local & 100%% Offline)
+echo    F E N D O R A  A I  --  Knowledge Search Hub (Local & 100%% Offline)
 echo ==================================================================
 echo.
 
@@ -24,6 +24,6 @@ python run.py
 
 if %errorlevel% neq 0 (
     echo.
-    echo Terjadi kendala saat menjalankan SENA.
+    echo Terjadi kendala saat menjalankan Fendora AI.
     pause
 )

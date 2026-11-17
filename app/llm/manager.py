@@ -19,7 +19,7 @@ except ImportError:
     LLAMA_CPP_AVAILABLE = False
 
 
-# Known model catalog for SENA
+# Known model catalog for Fendora AI
 MODEL_CATALOG = {
     "qwen2.5-0.5b-instruct-q4_k_m.gguf": {
         "name": "Qwen 2.5 0.5B Instruct",
@@ -206,7 +206,7 @@ class LLMManager:
 
             req = urllib.request.Request(
                 url,
-                headers={"User-Agent": "SENA-Local-AI/1.0"}
+                headers={"User-Agent": "Fendora-AI-Local/1.0"}
             )
 
             with urllib.request.urlopen(req) as resp, open(tmp_path, "wb") as f_out:
@@ -317,7 +317,7 @@ class LLMManager:
         # Mode-specific system prompts (Natural Perplexity Synthesis)
         if mode == "fast":
             system_instruction = (
-                "Anda adalah asisten AI cerdas SENA (Search Engine & Knowledge Hub).\n"
+                "Anda adalah asisten AI cerdas Fendora AI (Intelligent Local Knowledge & Search Hub).\n"
                 "Tugas Anda: Berikan KESIMPULAN NARATIF YANG NATURAL, singkat, dan jelas dalam Bahasa Indonesia "
                 "berdasarkan topik pencarian dan isi dokumen yang ditemukan.\n\n"
                 "ATURAN UTAMA:\n"
@@ -330,7 +330,7 @@ class LLMManager:
             max_content_len = 800
         elif mode == "thinking":
             system_instruction = (
-                "Anda adalah asisten analis AI cerdas SENA bergaya Perplexity AI Pro.\n"
+                "Anda adalah asisten analis AI cerdas Fendora AI bergaya Perplexity AI Pro.\n"
                 "Tugas Anda: Berikan SINTESIS MENDALAM, komprehensif, terstruktur, dan naratif dalam Bahasa Indonesia "
                 "yang menganalisis isi dokumen-dokumen temuan secara mendalam.\n\n"
                 "PEDOMAN PENULISAN:\n"
@@ -346,7 +346,7 @@ class LLMManager:
             max_content_len = 2000
         else:  # balance (default)
             system_instruction = (
-                "Anda adalah asisten AI cerdas SENA (Search Engine & Knowledge Hub).\n"
+                "Anda adalah asisten AI cerdas Fendora AI (Intelligent Local Knowledge & Search Hub).\n"
                 "Tugas Anda: Membuat KESIMPULAN NARATIF YANG NATURAL, jelas, dan terstruktur dalam Bahasa Indonesia "
                 "mengenai isi dokumen yang ditemukan di komputer pengguna.\n\n"
                 "PEDOMAN WAJIB (SANGAT PENTING):\n"

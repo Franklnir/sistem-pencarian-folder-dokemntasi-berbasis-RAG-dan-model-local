@@ -133,7 +133,7 @@ def ask_document_ai(req: AskRequest):
         if not chunks:
             return AskResponse(
                 answer="Dokumen ini belum memiliki teks yang terindeks atau masih dalam antrean pemrosesan.",
-                model="SENA Assistant",
+                model="Fendora AI Assistant",
                 mode=req.mode,
                 mode_label=mode_cfg["label"],
                 sources=[]
@@ -157,7 +157,7 @@ def ask_document_ai(req: AskRequest):
         if not results:
             return AskResponse(
                 answer="Tidak ditemukan dokumen yang relevan dengan kata kunci Anda. Coba kata kunci atau konsep yang berbeda.",
-                model="SENA Assistant",
+                model="Fendora AI Assistant",
                 mode=req.mode,
                 mode_label=mode_cfg["label"],
                 sources=[]

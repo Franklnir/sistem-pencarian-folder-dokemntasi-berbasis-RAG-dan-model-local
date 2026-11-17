@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SENA — AI KNOWLEDGE SEARCH HUB CLIENT LOGIC (v3.0)
+   FENDORA AI — AI KNOWLEDGE SEARCH HUB CLIENT LOGIC (v3.0)
    Hybrid Semantic Retrieval • Real-time SSE • Instant Smart Answer • Reader
    ========================================================================== */
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const summaryCollapseIcon = document.getElementById("summary-collapse-icon");
   const resultsDividerLabel = document.getElementById("results-divider-label");
 
-  let isAutoSummaryEnabled = localStorage.getItem("sena_auto_summary") !== "false";
+  let isAutoSummaryEnabled = localStorage.getItem("fendora_auto_summary") !== "false";
   let activeSummaryAbortController = null;
   let lastSearchQuery = "";
   let currentTopResults = [];
@@ -1311,7 +1311,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="model-card-title-row">
               <span class="model-card-name">${escapeHtml(m.name)}</span>
               <span class="${tagClass}">${escapeHtml(m.tag)}</span>
-              ${m.recommended ? '<span style="font-size: 11px; color: #34d399; font-weight: 600;">★ Rekomendasi SENA</span>' : ''}
+              ${m.recommended ? '<span style="font-size: 11px; color: #34d399; font-weight: 600;">★ Rekomendasi Fendora AI</span>' : ''}
             </div>
             <div class="model-card-desc">${escapeHtml(m.description)}</div>
             <div class="model-card-meta">Ukuran file: ${m.size_mb} MB • ${isInstalled ? '✓ Terpasang di laptop' : 'Belum diunduh'}</div>
@@ -1404,7 +1404,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleAutoSummary.checked = isAutoSummaryEnabled;
     toggleAutoSummary.addEventListener("change", (e) => {
       isAutoSummaryEnabled = e.target.checked;
-      localStorage.setItem("sena_auto_summary", isAutoSummaryEnabled ? "true" : "false");
+      localStorage.setItem("fendora_auto_summary", isAutoSummaryEnabled ? "true" : "false");
       if (isAutoSummaryEnabled && isSearching && currentTopResults && currentTopResults.length > 0 && !currentSynthesizedText) {
         generatePerplexitySummary(lastSearchQuery, currentTopResults);
       }
